@@ -11,6 +11,9 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * userlarni hamma malumotioni ochiqlamay get qilish uchun ishlatilai
+ */
 public class UserGetDto {
     private UUID id;
     private String username;

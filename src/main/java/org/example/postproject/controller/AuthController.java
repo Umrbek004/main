@@ -14,10 +14,20 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * @param request -- request ichida username va password keladi
+     *                va shu boyicha authService ning ichidagi auth qiladigan joyiga uzatadi
+     * @return
+     */
     @PostMapping("sign-in")
-    private ResponseData<AuthenticationResponse> signIn(@RequestBody AuthenticationRequest request) {
+    private ResponseData<?> signIn(@RequestBody AuthenticationRequest request) {
         return authService.authenticate(request);
     }
+
+    /**
+     * @param request - request ning ichida 2 ta string value keladi ular Username va password ()
+     *                va shu boyicha authService ning ichidagi registratsiya qiladigan joyiga uzatadi
+     */
     @PostMapping("registration")
     private ResponseData<?> registration(@RequestBody AuthenticationRequest request) {
         return this.authService.register(request);

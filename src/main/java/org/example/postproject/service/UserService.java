@@ -21,6 +21,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    /**
+     *hamma userlarni qaytaradi(pageable qilib)
+     */
     public ResponseData<?> getAllUsers(int page, int size) {
         Page<User> all = userRepository.findAll(PageRequest.of(page, size));
         if (!all.hasContent()) {
@@ -34,6 +37,9 @@ public class UserService {
         return ResponseData.successResponse(result);
     }
 
+    /**
+     * kirib kelayotgan String word ni oz ichiga olgan hamma userlarni qaytaradi
+     */
     public ResponseData search(String word) {
         List<User> byUsernameContaining = userRepository.findByUsernameContaining(word);
         if (byUsernameContaining.isEmpty()) {

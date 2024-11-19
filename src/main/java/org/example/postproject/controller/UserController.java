@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+
     @GetMapping("get-all-users")
     public ResponseData<?> getAllUsers(@RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "10") int size) {
-        return this.userService.getAllUsers(page,size);
+        return this.userService.getAllUsers(page, size);
     }
 
     @PostMapping("search")

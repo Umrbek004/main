@@ -7,8 +7,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+/**
+ * postga tegishli ozgartirishlar
+ */
 public class PostMapper {
-    public PostGetDto toPostGetDto (Post post) {
+    public PostGetDto toPostGetDto(Post post) {
         PostGetDto postGetDto = new PostGetDto();
         postGetDto.setId(post.getId());
         postGetDto.setTitle(post.getTitle());

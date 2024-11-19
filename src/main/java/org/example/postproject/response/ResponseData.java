@@ -13,6 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @FieldDefaults(level = AccessLevel.PRIVATE)
+
+/**
+ * ResponseData - front uchun har doim 1 xil shablonda malumot ketishu uchun yozilgan
+ */
 public class ResponseData<T> {
 
     String message;

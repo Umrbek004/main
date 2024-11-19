@@ -9,6 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * Post ni create qilish uchun ishlatiladigan Dto
+ */
 public class CreatePostDto {
     private String title;
     private String content;

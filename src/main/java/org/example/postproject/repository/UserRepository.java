@@ -10,7 +10,13 @@ import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
-
+    /**
+     * username boyicha userlarni qidirib keladi
+     */
     Optional<User> findByUsername(String username);
-    List<User> findByUsernameContaining(String username);
+
+    /**
+     * search qilinayotgan worni oz ichiga olgan hamma usernamlarni topib keladi
+     */
+    List<User> findByUsernameContaining(String word);
 }

@@ -11,9 +11,13 @@ import org.example.postproject.entities.base.BaseEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+
+/**
+ * Post table yaratib berish uchun kerak bolgan class
+ */
 public class Post extends BaseEntity {
     private String title;
     private String content;
-    @ManyToOne
+    @ManyToOne // 1 ta user ko'p post yarata olishi uchun shu annotatsiyadan foydalaniladi
     private User author;
 }

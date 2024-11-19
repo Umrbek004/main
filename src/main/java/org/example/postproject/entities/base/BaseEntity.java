@@ -16,6 +16,11 @@ import java.util.UUID;
 @Setter
 @ToString
 @EntityListeners(AuditingEntityListener.class)
+/**
+ * Bu base entity hisoblanadi
+ * ya'ni bu class ozi table yaratmaydi lekin shu classdan extend olingan hamma Entity classlarga ozining fieldlarini q'shib beradi
+ * bu kodni takror yozmaslik uchun ishlatiladi
+ */
 public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

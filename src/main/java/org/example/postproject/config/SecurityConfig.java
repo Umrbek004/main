@@ -16,6 +16,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+/**
+ * Bu classda security config qilingan
+ */
 public class SecurityConfig {
 
     private final AuthenticationProvider authenticationProvider;
@@ -27,8 +30,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers(
-                                        "api/v1/auth/**",
+                                .requestMatchers(  // faqat pasdagi path lar ochiq va boshqa yo'llarga faqat autharizatsiyadan otgannan keyin borsa boladi
+                                        "api/v1/auth/**",// auth yoli har doiom ochiq bolishi kk
                                         "/v2/api-docs",
                                         "/v3/api-docs",
                                         "/v3/api-docs/**",
@@ -38,12 +41,7 @@ public class SecurityConfig {
                                         "/configuration/security",
                                         "/swagger-ui/**",
                                         "/webjars/**",
-                                        "/swagger-ui.html/**",
-                                        "/swagger-ui/**",       // Swagger UI paths
-                                        "/swagger-ui.html",     // Swagger UI HTML path
-                                        "/webjars/**",          // Webjars for Swagger UI
-                                        "/v3/api-docs/**",      // OpenAPI docs paths
-                                        "/swagger-resources/**")
+                                        "/swagger-ui.html/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()

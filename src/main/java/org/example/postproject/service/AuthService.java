@@ -23,13 +23,24 @@ public class AuthService {
     private final JWTProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
-    public ResponseData<AuthenticationResponse> authenticate(AuthenticationRequest request) {
-        authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()));
+
+    /**
+     *
+     * bu method da username boyicha DB dan qidirib keladi
+     * Agar DB da bunaqa username li user bo'lmasa 'Username yoki password xato' qaytaradi
+     * user mavjud bolsa passwordlarni solishtiradi (encodlangan holatda) agar tog'ri kelmasa 'Username yoki Password xato'
+     * qaytadi
+     * agar hammasi to'g'ri kelsa return da  AuthenticationResponse holida jwt token va o'sha user qaytadi
+     */
+    public ResponseData<?> authenticate(AuthenticationRequest request) {
         Optional<User> byUsername = userRepository.findByUsername(request.getUsername());
+        if (byUsername.isEmpty()) {
+            return new ResponseData<>("Username yoki Password xato",false);
+        }
         User user = byUsername.get();
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            return new ResponseData<>("Username yoki Password xato",false);
+        }
         String token = jwtProvider.generateAccessToken(user);
         AuthenticationResponse authenticationResponse = new AuthenticationResponse();
         authenticationResponse.setToken(token);
@@ -37,6 +48,11 @@ public class AuthService {
         return ResponseData.successResponse(authenticationResponse);
     }
 
+
+    /**
+     *
+     * username va password keladi va shunga mos User yaratadi (password encodlangan holatda)
+     */
     public ResponseData<?> register(AuthenticationRequest request) {
         User user = new User();
         user.setUsername(request.getUsername());

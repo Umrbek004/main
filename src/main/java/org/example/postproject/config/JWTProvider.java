@@ -15,16 +15,25 @@ import java.util.function.Function;
 
 @Component
 public class JWTProvider {
-
+    /**
+     * Jwt ga qoshiladigan secret key
+     * bu keysiz uni decode qilib bo'lamydi
+     */
     @Value("${post.security.jwt.secret-key}")
     private String SECRET_KEY;
-
+    /**
+     * Jwt tokenning tugash vaqti
+     */
     @Value("${post.security.jwt.expiration}")
     private long TOKEN_EXPIRATION;
 
     public String generateAccessToken(UserDetails userDetails) {
         return generateToken(userDetails, TOKEN_EXPIRATION);
     }
+
+    /**
+     * Jwt yaratish
+     */
     private String generateToken(UserDetails userDetails, long expiration) {
         return Jwts
                 .builder()
@@ -35,14 +44,19 @@ public class JWTProvider {
                 .compact();
     }
 
+    /**
+     * jwt dan username ni ajratib olish
+     */
     public String extractUsername(String token) {
         return extractClaims(token, Claims::getSubject);
     }
+
     private <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-    private Claims extractAllClaims(String token){
+
+    private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(signKey())
@@ -50,29 +64,26 @@ public class JWTProvider {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+    /**
+     * Jwt eskirmaganmi yo'qmi va ajratib olingan username bizga kirib kelayotgan username birxilligini tekshirish
+     */
     public boolean isValidToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpiration(token));
     }
+
     private boolean isTokenExpiration(String token) {
         return extractExpiration(token).before(new Date());
     }
+
     private Date extractExpiration(String token) {
         return extractClaims(token, Claims::getExpiration);
     }
-    private Key signKey(){
+
+    private Key signKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-    public void invalidateToken(String token) {
-        Claims claims = extractAllClaims(token);
-        if (claims == null) {
-            throw new BadCredentialsException("Invalid token");
-        }
-        claims.setExpiration(new Date());
-        Jwts.builder()
-                .setClaims(claims)
-                .signWith(signKey())
-                .compact();
-    }
+
 }

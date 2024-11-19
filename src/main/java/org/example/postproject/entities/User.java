@@ -17,12 +17,17 @@ import java.util.Collections;
 @NoArgsConstructor
 @Builder
 @Entity(name = "users")
+/**
+ * user table yaratib berish uchun kerak bolgan class
+ */
 public class User extends BaseEntity implements UserDetails {
 
     private String username;
     private String password;
 
-
+    /**
+     * bu yerda hohlasak userlarga role yoki permission qoshsak boladi
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();

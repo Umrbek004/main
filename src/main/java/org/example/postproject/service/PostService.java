@@ -16,14 +16,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+/**
+ * PostService -- post ga tegishli metodalarni oz ichiga oladi
+ */
 @Service
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
 
+    /**
+     *  Post create qiladigan method
+     */
     public ResponseData<?> createPost(CreatePostDto createPostDto) {
-        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();//kim yaratayotganini bilish uchun securitydan userni ajratib olamiz
         Post post = new Post();
         post.setTitle(createPostDto.getTitle());
         post.setContent(createPostDto.getContent());
@@ -32,6 +38,11 @@ public class PostService {
         return ResponseData.successResponse("Post created successfully");
     }
 
+    /**
+     * bitta user ga tegishli bolgan hamma postlarni qaytaradigan method
+     * agar kirib kelayotgan userId == null bolsa hozzirgi session da userni security dan oladi
+     * pageable holatda qaytaradi
+     */
     public ResponseData<?> getAllOwnPosts(int page, int size,UUID userId) {
         if (userId == null) {
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -49,14 +60,23 @@ public class PostService {
         return ResponseData.successResponse(result);
     }
 
+    /**
+     * bitta postni qaytarish uchun ishlatilgan method
+     */
     public ResponseData<?> getOneById(UUID id) {
-        Optional<Post> byId = postRepository.findById(id);
+        Optional<Post> byId = postRepository.findByIdAndDeletedFalse(id);
         if (byId.isEmpty()) {
             return new ResponseData<>("post did not find", false);
         }
         return ResponseData.successResponse(postMapper.toPostGetDto(byId.get()));
     }
 
+    /**
+     * bitta postni id boyicha ochirish (SOFT DELETE -> post DB dan ochmaydi shunchaki deleted fieldi true qilib qoyiladi)
+     * uchun ishlatiladi
+     *  userni securitydan oladi va tekshiradi(
+     * agar postga biriktirilgan user bilan securitydan olingan user 1 xil bo'lsa ochiradi aks holda yoq)
+     */
     public ResponseData<?> deleteOneById(UUID id) {
         Optional<Post> byId = postRepository.findById(id);
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -69,9 +89,13 @@ public class PostService {
         }
         post.setDeleted(true);
         postRepository.save(post);
-        return null;
+        return ResponseData.successResponse("Post deleted successfully");
     }
     @Modifying
+    /**
+     * userga tegishli hamma postlarni ochiradi(soft delete)
+     * userni securitydan oladi
+     */
     public ResponseData<?> deleteAll() {
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int i = postRepository.deleteAllByUserId(principal.getId());
@@ -81,6 +105,10 @@ public class PostService {
         return ResponseData.successResponse("Posts already deleted");
     }
 
+    /**
+     *post update qilish uchun bizarga postni id si va uning boshqa fieldlari kirib keladi(Userdan boshqa)
+     * Userni securitydan oladi va o'zgartirilayotgan postni useri bilan solishtiriladi
+     */
     public ResponseData<?> updateOneById(UUID id,PostGetDto updatedPost) {
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Post> byId = postRepository.findById(id);

@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+/**
+ * userga tegishli ozgartirishlar
+ */
 public class UserMapper {
     public UserGetDto toUserGetDto(User user) {
         UserGetDto userGetDto = new UserGetDto();

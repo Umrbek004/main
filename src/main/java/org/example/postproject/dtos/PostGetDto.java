@@ -11,6 +11,9 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * Postni ham get ham update uchun qo'llanilgan dto
+ */
 public class PostGetDto {
     private UUID id;
     private String title;
