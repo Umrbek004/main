@@ -1,5 +1,7 @@
 ## Diqqat!
 ###
 ishga tushurishdan oldin [application.properties] ni tekshirib olishingizni sorayman.
-port togri turgani.
+ <br>
+ port togri turgani.
+ <br>
 Db yaratilgan bolishi kk.
