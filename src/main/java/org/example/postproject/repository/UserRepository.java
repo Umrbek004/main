@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
     /**
-     * username boyicha userlarni qidirib keladi
+     *username boyicha userlarni qidirib keladi
      */
     Optional<User> findByUsername(String username);
 

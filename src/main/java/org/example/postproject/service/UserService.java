@@ -40,7 +40,7 @@ public class UserService {
     /**
      * kirib kelayotgan String word ni oz ichiga olgan hamma userlarni qaytaradi
      */
-    public ResponseData search(String word) {
+    public ResponseData<?> search(String word) {
         List<User> byUsernameContaining = userRepository.findByUsernameContaining(word);
         if (byUsernameContaining.isEmpty()) {
             return ResponseData.successResponse("User not found");

@@ -68,9 +68,9 @@ public class PostController {
     /**
      * 1 ta postni update qilish yoliga uzatadi
      */
-    @PutMapping("update-one-by-id/{id}")
-    public ResponseData<?> update(@PathVariable UUID id, @RequestBody PostGetDto postGetDto) {
-        return this.postService.updateOneById(id, postGetDto);
+    @PutMapping("update-one-by-id")
+    public ResponseData<?> update(@RequestBody PostGetDto postGetDto) {
+        return this.postService.updateOneById(postGetDto);
     }
 
 }
