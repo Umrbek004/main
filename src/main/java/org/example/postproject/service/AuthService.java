@@ -9,6 +9,7 @@ import org.example.postproject.repository.UserRepository;
 import org.example.postproject.response.ResponseData;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,6 +21,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final JWTProvider jwtProvider;
+    private final PasswordEncoder passwordEncoder;
 
     public ResponseData<AuthenticationResponse> authenticate(AuthenticationRequest request) {
         authenticationManager
@@ -35,4 +37,11 @@ public class AuthService {
         return ResponseData.successResponse(authenticationResponse);
     }
 
+    public ResponseData<?> register(AuthenticationRequest request) {
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
+        return ResponseData.successResponse("User registered successfully");
+    }
 }

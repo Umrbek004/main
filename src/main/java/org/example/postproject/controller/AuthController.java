@@ -18,5 +18,9 @@ public class AuthController {
     private ResponseData<AuthenticationResponse> signIn(@RequestBody AuthenticationRequest request) {
         return authService.authenticate(request);
     }
+    @PostMapping("registration")
+    private ResponseData<?> registration(@RequestBody AuthenticationRequest request) {
+        return this.authService.register(request);
+    }
 }
 
